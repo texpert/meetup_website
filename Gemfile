@@ -8,7 +8,7 @@ gem "rails", "~> 7.1.3", ">= 7.1.3.4"
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "sprockets-rails"
 
-# Use pg as the database for Active Record
+# Use postgresql as the database for Active Record
 gem "pg", "~> 1.5"
 
 # Use the Puma web server [https://github.com/puma/puma]
@@ -28,9 +28,8 @@ gem "jbuilder"
 
 # Use Redis adapter to run Action Cable in production
 gem "redis", ">= 4.0.1", group: :production
-
-# Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]
-# gem "kredis"
+gem "solid_cache"
+gem "solid_queue"
 
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 # gem "bcrypt", "~> 3.1.7"
@@ -42,7 +41,7 @@ gem "tzinfo-data", platforms: %i[ windows jruby ]
 gem "bootsnap", require: false
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
-gem "image_processing", "~> 1.13"
+# gem "image_processing", "~> 1.2"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
@@ -59,29 +58,3 @@ group :development do
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem "spring"
 end
-
-group :test do
-  # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
-  gem "capybara"
-  gem "selenium-webdriver"
-end
-
-# Use Solid Queue for background jobs
-gem "solid_queue", ">= 0.3.2"
-gem "mission_control-jobs"
-
-# Use Solid Cache for caching
-gem "solid_cache"
-
-# Spree gems
-gem "spree"
-gem "spree_emails"
-gem "spree_sample"
-gem "spree_backend"
-gem "spree_frontend"
-gem "spree_auth_devise"
-gem "spree_gateway"
-gem "spree_i18n"
-
-# only needed for MacOS and Ruby 3.0
-gem 'sassc', github: 'sass/sassc-ruby', branch: 'master'
