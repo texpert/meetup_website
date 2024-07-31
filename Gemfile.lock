@@ -226,17 +226,25 @@ GEM
       io-console (~> 0.5)
     sass-embedded (1.77.8-aarch64-linux-gnu)
       google-protobuf (~> 4.26)
+    sass-embedded (1.77.8-aarch64-linux-musl)
+      google-protobuf (~> 4.26)
     sass-embedded (1.77.8-arm-linux-gnueabihf)
+      google-protobuf (~> 4.26)
+    sass-embedded (1.77.8-arm-linux-musleabihf)
       google-protobuf (~> 4.26)
     sass-embedded (1.77.8-arm64-darwin)
       google-protobuf (~> 4.26)
     sass-embedded (1.77.8-x86-linux-gnu)
       google-protobuf (~> 4.26)
+    sass-embedded (1.77.8-x86-linux-musl)
+      google-protobuf (~> 4.26)
     sass-embedded (1.77.8-x86_64-darwin)
       google-protobuf (~> 4.26)
     sass-embedded (1.77.8-x86_64-linux-gnu)
       google-protobuf (~> 4.26)
-    solid_cache (0.6.0)
+    sass-embedded (1.77.8-x86_64-linux-musl)
+      google-protobuf (~> 4.26)
+    solid_cache (0.7.0)
       activejob (>= 7)
       activerecord (>= 7)
       railties (>= 7)
@@ -270,11 +278,19 @@ GEM
 
 PLATFORMS
   aarch64-linux
+  aarch64-linux-gnu
+  aarch64-linux-musl
   arm-linux
+  arm-linux-gnueabihf
+  arm-linux-musleabihf
   arm64-darwin
   x86-linux
+  x86-linux-gnu
+  x86-linux-musl
   x86_64-darwin
   x86_64-linux
+  x86_64-linux-gnu
+  x86_64-linux-musl
 
 DEPENDENCIES
   bootsnap
