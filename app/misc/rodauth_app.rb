@@ -10,7 +10,7 @@ class RodauthApp < Rodauth::Rails::App
 
     r.rodauth # route rodauth requests
 
-    if r.path.start_with?("/subscriptions")
+    if r.path.start_with?('/admin', '/subscriptions')
       rodauth.require_authentication
     end
 
