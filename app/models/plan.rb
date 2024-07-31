@@ -5,6 +5,8 @@ class Plan < ApplicationRecord
   include Discard::Model
   self.discard_column = :deleted_at
 
+  has_logidze
+
   belongs_to :organization, optional: true
   belongs_to :parent, class_name: 'Plan', optional: true
 
