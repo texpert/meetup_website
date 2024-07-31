@@ -75,7 +75,11 @@ GEM
       minitest (>= 5.1)
       mutex_m
       tzinfo (~> 2.0)
+    after_commit_everywhere (1.4.0)
+      activerecord (>= 4.2)
+      activesupport
     base64 (0.2.0)
+    bcrypt (3.1.20)
     bigdecimal (3.1.8)
     bindex (0.8.1)
     bootsnap (1.18.3)
@@ -221,6 +225,21 @@ GEM
       psych (>= 4.0.0)
     reline (0.5.9)
       io-console (~> 0.5)
+    roda (3.82.0)
+      rack
+    rodauth (2.36.0)
+      roda (>= 2.6.0)
+      sequel (>= 4)
+    rodauth-model (0.2.1)
+      rodauth (~> 2.0)
+    rodauth-rails (1.14.1)
+      bcrypt
+      railties (>= 5.0, < 8)
+      roda (~> 3.76)
+      rodauth (~> 2.34)
+      rodauth-model (~> 0.2)
+      sequel-activerecord_connection (~> 1.1)
+      tilt
     sass-embedded (1.77.8-aarch64-linux-gnu)
       google-protobuf (~> 4.26)
     sass-embedded (1.77.8-aarch64-linux-musl)
@@ -241,6 +260,12 @@ GEM
       google-protobuf (~> 4.26)
     sass-embedded (1.77.8-x86_64-linux-musl)
       google-protobuf (~> 4.26)
+    sequel (5.82.0)
+      bigdecimal
+    sequel-activerecord_connection (1.4.1)
+      activerecord (>= 5.0, < 8)
+      after_commit_everywhere (~> 1.1)
+      sequel (~> 5.38)
     solid_cache (0.7.0)
       activejob (>= 7)
       activerecord (>= 7)
@@ -255,6 +280,7 @@ GEM
       railties (>= 6.0.0)
     stringio (3.1.1)
     thor (1.3.1)
+    tilt (2.4.0)
     timeout (0.4.1)
     turbo-rails (2.0.6)
       actionpack (>= 6.0.0)
@@ -300,6 +326,7 @@ DEPENDENCIES
   propshaft
   puma (>= 5.0)
   rails (~> 7.1.3, >= 7.1.3.4)
+  rodauth-rails (~> 1.14)
   solid_cache
   solid_queue
   stimulus-rails

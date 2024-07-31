@@ -25,6 +25,7 @@ gem "stimulus-rails"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
 
+gem "rodauth-rails", "~> 1.14"
 gem "solid_cache"
 gem "solid_queue"
 
