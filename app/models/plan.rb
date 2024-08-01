@@ -3,6 +3,7 @@
 class Plan < ApplicationRecord
   include Currencies
   include Discard::Model
+
   self.discard_column = :deleted_at
 
   has_logidze
