@@ -5,6 +5,8 @@ class Email < ApplicationRecord
 
   include Discard::Model
 
+  has_logidze
+
   attr_readonly :account_email
 
   enum :status, unverified: 1, verified: 2, unreachable: 3
