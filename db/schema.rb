@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_08_02_185833) do
+ActiveRecord::Schema[7.1].define(version: 2024_08_02_205003) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "hstore"
@@ -32,6 +32,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_02_185833) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "deleted_at"
+    t.jsonb "log_data"
     t.index ["address"], name: "index_emails_on_address", unique: true
     t.index ["deleted_at"], name: "index_emails_on_deleted_at"
     t.index ["owner_id", "owner_type", "account_email"], name: "index_emails_on_owner_id_owner_type_and_account_email"
@@ -726,5 +727,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_02_185833) do
   SQL
   create_trigger :logidze_on_subscriptions, sql_definition: <<-SQL
       CREATE TRIGGER logidze_on_subscriptions BEFORE INSERT OR UPDATE ON public.subscriptions FOR EACH ROW WHEN ((COALESCE(current_setting('logidze.disabled'::text, true), ''::text) <> 'on'::text)) EXECUTE FUNCTION logidze_logger('null', 'updated_at')
+  SQL
+  create_trigger :logidze_on_emails, sql_definition: <<-SQL
+      CREATE TRIGGER logidze_on_emails BEFORE INSERT OR UPDATE ON public.emails FOR EACH ROW WHEN ((COALESCE(current_setting('logidze.disabled'::text, true), ''::text) <> 'on'::text)) EXECUTE FUNCTION logidze_logger('null', 'updated_at')
   SQL
 end
