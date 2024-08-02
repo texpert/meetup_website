@@ -8,6 +8,9 @@ class User < ApplicationRecord
 
   enum :status, staged: 1, unverified: 2, active: 3, recovery: 4, expired: 5, locked: 6, suspended: 7, disabled: 8
 
+  has_one :profile
+  accepts_nested_attributes_for :profile
+
   has_many :emails, as: :owner, dependent: :destroy
   accepts_nested_attributes_for :emails
 
