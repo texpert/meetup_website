@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 class Email < ApplicationRecord
-  KIND = { contact: 1, recovery: 2, alternative: 3 }.freeze
+  KIND = { 1 => :contact, 2 => :recovery, 3 => :alternative }.freeze
+  KIND_VALUES = KIND.keys.freeze
 
   include Discard::Model
 
@@ -13,10 +14,10 @@ class Email < ApplicationRecord
 
   belongs_to :owner, -> { with_discarded }, polymorphic: true
 
-  validate kind_values_legit, on: %i[create update]
+  validate :kind_values_legit, on: %i[create update]
 
   def kind_values_legit
     errors.add(:kind, :invalid) if kind_changed? && !kind_before_type_cast.is_a?(Array)
-    errors.add(:kind, :invalid) unless (kind - KIND.values).empty?
+    errors.add(:kind, :invalid) unless (kind - KIND_VALUES).empty?
   end
 end
