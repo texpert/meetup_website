@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_08_02_205003) do
+ActiveRecord::Schema[7.1].define(version: 2024_08_02_211016) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "hstore"
@@ -20,6 +20,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_02_205003) do
   # Note that some types may not work with other database engines. Be careful if changing database.
   create_enum "email_kind", ["contact", "recovery", "alternative"]
   create_enum "email_status", ["unverified", "verified", "unreachable"]
+  create_enum "profile_gender", ["male", "female"]
   create_enum "user_status", ["staged", "unverified", "active", "recovery", "expired", "locked", "suspended", "disabled"]
 
   create_table "emails", force: :cascade do |t|
@@ -61,6 +62,19 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_02_205003) do
     t.index ["deleted_at"], name: "index_plans_on_deleted_at"
     t.index ["organization_id"], name: "index_plans_on_organization_id"
     t.index ["parent_id"], name: "index_plans_on_parent_id"
+  end
+
+  create_table "profiles", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "full_name", null: false
+    t.string "preferred_name"
+    t.string "nickname"
+    t.enum "gender", enum_type: "profile_gender"
+    t.date "birthday"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "deleted_at"
+    t.index ["user_id"], name: "index_profiles_on_user_id"
   end
 
   create_table "solid_cache_entries", force: :cascade do |t|
@@ -134,6 +148,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_02_205003) do
     t.index ["status"], name: "index_users_on_status"
   end
 
+  add_foreign_key "profiles", "users"
   add_foreign_key "user_login_change_keys", "users", column: "id"
   add_foreign_key "user_password_reset_keys", "users", column: "id"
   add_foreign_key "user_remember_keys", "users", column: "id"
