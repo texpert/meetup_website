@@ -19,6 +19,7 @@ gem 'rodauth-rails', '~> 1.14'
 gem 'solid_cache'
 gem 'solid_queue'
 gem 'stimulus-rails' # Hotwire's modest JavaScript framework [https://stimulus.hotwired.dev]
+gem 'strong_migrations'
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 # gem 'tzinfo-data', platforms: %i[ windows jruby ]
