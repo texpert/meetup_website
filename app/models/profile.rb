@@ -3,6 +3,8 @@
 class Profile < ApplicationRecord
   include Discard::Model
 
+  has_logidze
+
   belongs_to :user
 
   enum :gender, male: 1, female: 2

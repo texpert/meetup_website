@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_08_02_211016) do
+ActiveRecord::Schema[7.1].define(version: 2024_08_02_213335) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "hstore"
@@ -74,6 +74,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_02_211016) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "deleted_at"
+    t.jsonb "log_data"
     t.index ["user_id"], name: "index_profiles_on_user_id"
   end
 
@@ -745,5 +746,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_02_211016) do
   SQL
   create_trigger :logidze_on_emails, sql_definition: <<-SQL
       CREATE TRIGGER logidze_on_emails BEFORE INSERT OR UPDATE ON public.emails FOR EACH ROW WHEN ((COALESCE(current_setting('logidze.disabled'::text, true), ''::text) <> 'on'::text)) EXECUTE FUNCTION logidze_logger('null', 'updated_at')
+  SQL
+  create_trigger :logidze_on_profiles, sql_definition: <<-SQL
+      CREATE TRIGGER logidze_on_profiles BEFORE INSERT OR UPDATE ON public.profiles FOR EACH ROW WHEN ((COALESCE(current_setting('logidze.disabled'::text, true), ''::text) <> 'on'::text)) EXECUTE FUNCTION logidze_logger('null', 'updated_at')
   SQL
 end
