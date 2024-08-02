@@ -2,7 +2,6 @@ source 'https://rubygems.org'
 
 ruby file: '.tool-versions'
 
-# Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem 'rails', '~> 7.1.3', '>= 7.1.3.4'
 
 gem 'bootsnap', require: false # Reduces boot times through caching; required in config/boot.rb
@@ -34,12 +33,11 @@ group :development, :test do
 end
 
 group :development do
+  gem 'active_record_doctor', git: 'https://github.com/gregnavis/active_record_doctor'
   gem 'foreman'
 
   # Add speed badges [https://github.com/MiniProfiler/rack-mini-profiler]
   # gem "rack-mini-profiler"
 
-  # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
-  # gem "spring"
   gem 'web-console' # Use console on exceptions pages [https://github.com/rails/web-console]
 end

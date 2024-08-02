@@ -8,6 +8,13 @@ GIT
       money (~> 6.16)
       railties (>= 3.0)
 
+GIT
+  remote: https://github.com/gregnavis/active_record_doctor
+  revision: 75452bb433dc0860f72e8646352d17411a7a1e2f
+  specs:
+    active_record_doctor (1.14.0)
+      activerecord (>= 4.2.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -337,6 +344,7 @@ PLATFORMS
   x86_64-linux-musl
 
 DEPENDENCIES
+  active_record_doctor!
   bootsnap
   dartsass-rails
   debug
