@@ -10,11 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_08_01_211646) do
+ActiveRecord::Schema[7.1].define(version: 2024_08_02_162525) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "hstore"
   enable_extension "plpgsql"
+
+  # Custom types defined in this database.
+  # Note that some types may not work with other database engines. Be careful if changing database.
+  create_enum "user_status", ["staged", "unverified", "active", "recovery", "expired", "locked", "suspended", "disabled"]
 
   create_table "plans", force: :cascade do |t|
     t.bigint "organization_id"
@@ -103,12 +107,13 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_01_211646) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.integer "status", default: 1, null: false
-    t.citext "email", null: false
     t.string "password_hash"
     t.jsonb "log_data"
     t.datetime "deleted_at"
-    t.index ["email"], name: "index_users_on_email", unique: true, where: "(status = ANY (ARRAY[1, 2]))"
+    t.citext "email"
+    t.enum "status", default: "staged", null: false, enum_type: "user_status"
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["status"], name: "index_users_on_status"
   end
 
   add_foreign_key "user_login_change_keys", "users", column: "id"
