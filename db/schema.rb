@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_08_02_175036) do
+ActiveRecord::Schema[7.1].define(version: 2024_08_02_175625) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "hstore"
@@ -18,7 +18,24 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_02_175036) do
 
   # Custom types defined in this database.
   # Note that some types may not work with other database engines. Be careful if changing database.
+  create_enum "email_kind", ["contact", "recovery", "alternative"]
+  create_enum "email_status", ["unverified", "verified", "unreachable"]
   create_enum "user_status", ["staged", "unverified", "active", "recovery", "expired", "locked", "suspended", "disabled"]
+
+  create_table "emails", force: :cascade do |t|
+    t.bigint "owner_id", null: false
+    t.text "owner_type", null: false
+    t.citext "address", null: false
+    t.enum "status", default: "unverified", null: false, enum_type: "email_status"
+    t.enum "kind", default: [], null: false, array: true, enum_type: "email_kind"
+    t.boolean "account_email", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "deleted_at"
+    t.index ["address"], name: "index_emails_on_address", unique: true
+    t.index ["deleted_at"], name: "index_emails_on_deleted_at"
+    t.index ["owner_id", "owner_type", "account_email"], name: "index_emails_on_owner_id_owner_type_and_account_email"
+  end
 
   create_table "plans", force: :cascade do |t|
     t.bigint "organization_id"
