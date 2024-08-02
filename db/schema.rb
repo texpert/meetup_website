@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_08_02_162525) do
+ActiveRecord::Schema[7.1].define(version: 2024_08_02_175036) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "hstore"
@@ -110,9 +110,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_02_162525) do
     t.string "password_hash"
     t.jsonb "log_data"
     t.datetime "deleted_at"
-    t.citext "email"
     t.enum "status", default: "staged", null: false, enum_type: "user_status"
-    t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["status"], name: "index_users_on_status"
   end
 
