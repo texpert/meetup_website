@@ -15,7 +15,7 @@ gem 'pg', '~> 1.5' # Use postgresql as the database for Active Record
 gem 'propshaft'
 gem 'puma', '>= 5.0' # Use the Puma web server [https://github.com/puma/puma]
 gem 'turbo-rails' # Hotwire's SPA-like page accelerator [https://turbo.hotwired.dev]
-gem 'rodauth-rails', '~> 1.14'
+gem 'rodauth-rails', '~> 1.15'
 gem 'solid_cache'
 gem 'solid_queue'
 gem 'stimulus-rails' # Hotwire's modest JavaScript framework [https://stimulus.hotwired.dev]
