@@ -7,6 +7,8 @@ gem 'rails', '~> 7.1.3', '>= 7.1.3.4'
 
 gem 'bootsnap', require: false # Reduces boot times through caching; required in config/boot.rb
 gem 'dartsass-rails'
+gem 'devise'
+gem 'devise-multi_email'
 gem 'importmap-rails' # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
 gem 'pg', '~> 1.5' # Use postgresql as the database for Active Record
 gem 'propshaft'
