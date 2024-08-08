@@ -21,4 +21,8 @@ class User < ApplicationRecord
 
   after_discard { emails.update_all(discarded_at: Time.zone.now) }
   after_undiscard { emails.update_all(discarded_at: nil) }
+
+  def active_for_authentication?
+    super && !discarded?
+  end
 end
