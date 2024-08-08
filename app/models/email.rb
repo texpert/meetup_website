@@ -4,6 +4,8 @@ class Email < ApplicationRecord
   KIND = { 1 => :contact, 2 => :recovery, 3 => :alternative }.freeze
   KIND_VALUES = KIND.keys.freeze
 
+  include Discard::Model
+
   attr_readonly :primary
 
   enum :status, untried: 1, reachable: 2, unreachable: 3, _default: 'untried'
