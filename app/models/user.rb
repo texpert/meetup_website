@@ -6,6 +6,11 @@ class User < ApplicationRecord
   include Discard::Model
   self.discard_column = :deleted_at
 
+  has_many :emails, as: :user
+
+  after_discard { emails.update_all(discarded_at: Time.zone.now) }
+  after_undiscard { emails.update_all(discarded_at: nil) }
+
   # Include default devise modules. Others available are: :omniauthable
 
   # devise-multi_email changes:
@@ -16,11 +21,6 @@ class User < ApplicationRecord
 
   enum :status, staged: 1, unverified: 2, active: 3, recovery: 4, expired: 5, locked: 6, suspended: 7,
        disabled: 8, _default: "staged"
-
-  has_many :emails, as: :user
-
-  after_discard { emails.update_all(discarded_at: Time.zone.now) }
-  after_undiscard { emails.update_all(discarded_at: nil) }
 
   def active_for_authentication?
     super && !discarded?
