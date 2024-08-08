@@ -10,7 +10,9 @@ gem 'dartsass-rails'
 gem 'devise'
 gem 'devise-multi_email'
 gem 'discard'
+gem 'fx' # Versioned database functions and triggers for Rails, used by logidze to work with db/schema.rb
 gem 'importmap-rails' # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
+gem 'logidze' # Database changes log for Rails
 gem 'pg', '~> 1.5' # Use postgresql as the database for Active Record
 gem 'propshaft'
 gem 'puma', '>= 5.0' # Use the Puma web server [https://github.com/puma/puma]

@@ -105,6 +105,9 @@ GEM
     drb (2.2.1)
     erubi (1.13.0)
     foreman (0.88.1)
+    fx (0.8.0)
+      activerecord (>= 6.0.0)
+      railties (>= 6.0.0)
     globalid (1.2.1)
       activesupport (>= 6.1)
     google-protobuf (4.27.2)
@@ -135,6 +138,9 @@ GEM
     irb (1.14.0)
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
+    logidze (1.3.0)
+      activerecord (>= 6.0)
+      railties (>= 6.0)
     loofah (2.22.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
@@ -299,7 +305,9 @@ DEPENDENCIES
   devise-multi_email
   discard
   foreman
+  fx
   importmap-rails
+  logidze
   pg (~> 1.5)
   propshaft
   puma (>= 5.0)
