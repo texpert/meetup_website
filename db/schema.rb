@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_08_08_101555) do
+ActiveRecord::Schema[7.1].define(version: 2024_08_08_101937) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "hstore"
@@ -36,6 +36,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_08_101555) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "deleted_at"
+    t.jsonb "log_data"
     t.index ["deleted_at"], name: "index_emails_on_deleted_at"
     t.index ["email"], name: "index_emails_on_email", unique: true
     t.index ["user_id", "user_type", "primary"], name: "index_emails_on_user_id_user_type_and_primary"
@@ -69,6 +70,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_08_101555) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "deleted_at"
+    t.jsonb "log_data"
     t.index ["deleted_at"], name: "index_users_on_deleted_at"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["status"], name: "index_users_on_status"
@@ -654,4 +656,11 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_08_101555) do
       $function$
   SQL
 
+
+  create_trigger :logidze_on_users, sql_definition: <<-SQL
+      CREATE TRIGGER logidze_on_users BEFORE INSERT OR UPDATE ON public.users FOR EACH ROW WHEN ((COALESCE(current_setting('logidze.disabled'::text, true), ''::text) <> 'on'::text)) EXECUTE FUNCTION logidze_logger('null', 'updated_at')
+  SQL
+  create_trigger :logidze_on_emails, sql_definition: <<-SQL
+      CREATE TRIGGER logidze_on_emails BEFORE INSERT OR UPDATE ON public.emails FOR EACH ROW WHEN ((COALESCE(current_setting('logidze.disabled'::text, true), ''::text) <> 'on'::text)) EXECUTE FUNCTION logidze_logger('null', 'updated_at')
+  SQL
 end

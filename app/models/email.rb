@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Email < ApplicationRecord
+  has_logidze
+
   KIND = { 1 => :contact, 2 => :recovery, 3 => :alternative }.freeze
   KIND_VALUES = KIND.keys.freeze
 
