@@ -8,8 +8,8 @@ class User < ApplicationRecord
 
   has_many :emails, as: :user
 
-  after_discard { emails.update_all(discarded_at: Time.zone.now) }
-  after_undiscard { emails.update_all(discarded_at: nil) }
+  after_discard { emails.update_all(deleted_at: Time.zone.now) }
+  after_undiscard { emails.update_all(deleted_at: nil) }
 
   # Include default devise modules. Others available are: :omniauthable
 
