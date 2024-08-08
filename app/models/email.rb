@@ -7,6 +7,7 @@ class Email < ApplicationRecord
   KIND_VALUES = KIND.keys.freeze
 
   include Discard::Model
+  self.discard_column = :deleted_at
 
   attr_readonly :primary
 

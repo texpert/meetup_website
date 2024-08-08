@@ -4,6 +4,7 @@ class User < ApplicationRecord
   has_logidze
 
   include Discard::Model
+  self.discard_column = :deleted_at
 
   enum :status, staged: 1, unverified: 2, active: 3, recovery: 4, expired: 5, locked: 6, suspended: 7,
        disabled: 8, _default: "staged"
