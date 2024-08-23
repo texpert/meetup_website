@@ -6,10 +6,10 @@ class User < ApplicationRecord
   include Discard::Model
   self.discard_column = :deleted_at
 
-  has_many :emails, as: :user
+  has_many :emails, as: :user # rubocop:disable Rails/HasManyOrHasOneDependent
 
-  after_discard { emails.update_all(deleted_at: Time.zone.now) }
-  after_undiscard { emails.update_all(deleted_at: nil) }
+  after_discard { emails.update_all(deleted_at: Time.zone.now) } # rubocop:disable Rails/SkipsModelValidations
+  after_undiscard { emails.update_all(deleted_at: nil) } # rubocop:disable Rails/SkipsModelValidations
 
   # Include default devise modules. Others available are: :omniauthable
 
@@ -20,7 +20,7 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :timeoutable, :trackable, :multi_email_validatable
 
   enum :status, staged: 1, unverified: 2, active: 3, recovery: 4, expired: 5, locked: 6, suspended: 7,
-       disabled: 8, _default: "staged"
+       disabled: 8, _default: 'staged'
 
   def active_for_authentication?
     super && !discarded?

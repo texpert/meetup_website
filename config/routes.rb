@@ -4,10 +4,10 @@ Rails.application.routes.draw do
   devise_for :users, controllers: {
     confirmations: 'users/confirmations',
     # omniauth_callbacks: 'users/omniauth_callbacks',
-    passwords: 'users/passwords',
+    passwords:     'users/passwords',
     registrations: 'users/registrations',
-    sessions: 'users/sessions',
-    unlocks: 'users/unlocks'
+    sessions:      'users/sessions',
+    unlocks:       'users/unlocks'
   }
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
