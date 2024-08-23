@@ -5,7 +5,26 @@
 
 version: 2
 updates:
-  - package-ecosystem: "bundler" # See documentation for possible values
-    directory: "/" # Location of package manifests
+  - package-ecosystem: bundler
+    directory: "/"
+    groups:
+      ruby-production-dependencies:
+        dependency-type: "production"
+      ruby-development-dependencies:
+        dependency-type: "development"
     schedule:
-      interval: "weekly"
+      interval: daily
+      time: "03:00"
+    open-pull-requests-limit: 30
+    allow:
+      - dependency-type: all
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    groups:
+      gha-production-dependencies:
+        dependency-type: "production"
+      gha-development-dependencies:
+        dependency-type: "development"
+    schedule:
+      interval: daily
+      time: "03:00"
