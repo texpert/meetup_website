@@ -18,4 +18,13 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   root to: 'home#index'
+
+  namespace :admin do
+    get 'users/create'
+    get 'users/new'
+    get 'users/show'
+    get 'users/update'
+    get 'users/discard'
+    get 'users/destroy'
+  end
 end
