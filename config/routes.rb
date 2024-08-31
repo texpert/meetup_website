@@ -20,6 +20,9 @@ Rails.application.routes.draw do
   root to: 'home#index'
 
   namespace :admin do
+    get '/' => :dashboard
+    get 'dashboard'
+
     get 'users/create'
     get 'users/new'
     get 'users/show'
