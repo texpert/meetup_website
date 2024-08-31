@@ -23,11 +23,10 @@ Rails.application.routes.draw do
     get '/' => :dashboard
     get 'dashboard'
 
-    get 'users/create'
-    get 'users/new'
-    get 'users/show'
-    get 'users/update'
-    get 'users/discard'
-    get 'users/destroy'
+    resources :users do
+      member do
+        delete 'discard'
+      end
+    end
   end
 end
