@@ -7,8 +7,4 @@ class AdminController < ApplicationController
   def index
     render 'dashboard'
   end
-
-  def dashboard
-    index
-  end
 end
