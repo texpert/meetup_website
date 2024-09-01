@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <title>MeetupWebsite Administration</title>
+
+    <%= render 'metatags' %>
+    <%= stylesheet_link_tag "https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css" %>
+    <%= stylesheet_link_tag "https://cdn.jsdelivr.net/npm/overlayscrollbars@2.3.0/styles/overlayscrollbars.min.css" %>
+    <%= stylesheet_link_tag "admin" %>
+    <%= javascript_import_module_tag "https://cdn.jsdelivr.net/npm/overlayscrollbars@2.3.0/browser/overlayscrollbars.browser.es6.min.js" %>
+
+    <%= stylesheet_link_tag "https://cdn.jsdelivr.net/npm/apexcharts@3.37.1/dist/apexcharts.css", crossorigin: "anonymous" %>
+    <%= stylesheet_link_tag "https://cdn.jsdelivr.net/npm/jsvectormap@1.5.3/dist/css/jsvectormap.min.css", crossorigin: "anonymous" %>
+  </head>
+
+  <body class="layout-fixed sidebar-expand-lg bg-body-tertiary sidebar-open app-loaded">
+    <div class="app-wrapper">
+      <%= render "navbar" %>
+      <%= render "sidebar" %>
+
+      <main class="app-main">
+        <div class="app-content-header">
+          <div class="container-fluid">
+            <%= render "flash" %>
+
+            <%= yield %>
+          </div>
+        </div>
+      </main>
+
+      <%= render 'footer' %>
+
+      <%#= turbo_frame_tag "modal" %>
+<!--      <div class="sidebar-overlay"></div>-->
+    </div>
+
+    <%= javascript_import_module_tag "https://cdn.jsdelivr.net/npm/admin-lte@4.0.0-beta1/dist/js/adminlte.min.js" %>
+
+    <!--begin::OverlayScrollbars Configure-->
+    <script>
+        const SELECTOR_SIDEBAR_WRAPPER = ".sidebar-wrapper";
+        const Default = {
+            scrollbarTheme: "os-theme-light",
+            scrollbarAutoHide: "leave",
+            scrollbarClickScroll: true,
+        };
+        document.addEventListener("DOMContentLoaded", function () {
+            const sidebarWrapper = document.querySelector(SELECTOR_SIDEBAR_WRAPPER);
+            if (
+                sidebarWrapper &&
+                typeof OverlayScrollbarsGlobal?.OverlayScrollbars !== "undefined"
+            ) {
+                OverlayScrollbarsGlobal.OverlayScrollbars(sidebarWrapper, {
+                    scrollbars: {
+                        theme: Default.scrollbarTheme,
+                        autoHide: Default.scrollbarAutoHide,
+                        clickScroll: Default.scrollbarClickScroll,
+                    },
+                });
+            }
+        });
+    </script>
+    <!--end::OverlayScrollbars Configure-->
+
+  </body>
+</html>
