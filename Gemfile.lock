@@ -309,7 +309,7 @@ GEM
     sass-embedded (1.77.8-x86_64-linux-musl)
       google-protobuf (~> 4.26)
     securerandom (0.3.1)
-    solid_cache (1.0.1)
+    solid_cache (1.0.2)
       activejob (>= 7.2)
       activerecord (>= 7.2)
       railties (>= 7.2)
@@ -337,7 +337,7 @@ GEM
     websocket-driver (0.7.6)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
-    zeitwerk (2.6.17)
+    zeitwerk (2.6.18)
 
 PLATFORMS
   aarch64-linux
