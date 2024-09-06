@@ -20,46 +20,58 @@ default: &default
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
 
 development:
-  <<: *default
-  database: meetup_website_dev_db
-  host: localhost
+  primary: &primary_development
+    <<: *default
+    database: meetup_website_dev_db
+    host: localhost
 
-  # The specified database role being used to connect to PostgreSQL.
-  # To create additional roles in PostgreSQL see `$ createuser --help`.
-  # When left blank, PostgreSQL will use the default role. This is
-  # the same name as the operating system user running Rails.
-  username: meetup_website_dev
+    # The specified database role being used to connect to PostgreSQL.
+    # To create additional roles in PostgreSQL see `$ createuser --help`.
+    # When left blank, PostgreSQL will use the default role. This is
+    # the same name as the operating system user running Rails.
+    username: meetup_website_dev
 
-  # The password associated with the PostgreSQL role (username).
-  password: meetup_website_pass
+    # The password associated with the PostgreSQL role (username).
+    password: meetup_website_pass
 
-  # Connect on a TCP socket. Omitted by default since the client uses a
-  # domain socket that doesn't need configuration. Windows does not have
-  # domain sockets, so uncomment these lines.
-  #host: localhost
+    # Connect on a TCP socket. Omitted by default since the client uses a
+    # domain socket that doesn't need configuration. Windows does not have
+    # domain sockets, so uncomment these lines.
+    #host: localhost
 
-  # The TCP port the server listens on. Defaults to 5432.
-  # If your server runs on a different port number, change accordingly.
-  #port: 5432
+    # The TCP port the server listens on. Defaults to 5432.
+    # If your server runs on a different port number, change accordingly.
+    #port: 5432
 
-  # Schema search path. The server defaults to $user,public
-  #schema_search_path: myapp,sharedapp,public
+    # Schema search path. The server defaults to $user,public
+    #schema_search_path: myapp,sharedapp,public
 
-  # Minimum log levels, in increasing order:
-  #   debug5, debug4, debug3, debug2, debug1,
-  #   log, notice, warning, error, fatal, and panic
-  # Defaults to warning.
-  #min_messages: notice
+    # Minimum log levels, in increasing order:
+    #   debug5, debug4, debug3, debug2, debug1,
+    #   log, notice, warning, error, fatal, and panic
+    # Defaults to warning.
+    #min_messages: notice
+
+  cache:
+    <<: *primary_development
+    database: meetup_website_dev_cache
+    migrations_paths: db/cache_migrate
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
 test:
-  <<: *default
-  database: meetup_website_test_db
-  host: localhost
-  username: meetup_website_dev
-  password: meetup_website_pass
+  primary: &primary_test
+    <<: *default
+    database: meetup_website_test_db
+    host: localhost
+    username: meetup_website_dev
+    password: meetup_website_pass
+
+  cache:
+    <<: *primary_test
+    database: meetup_website_test_cache
+    migrations_paths: db/cache_migrate
 
 # As with config/credentials.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is
@@ -82,5 +94,11 @@ test:
 # for a full overview on how database connection configuration can be specified.
 #
 production:
-  <<: *default
-  url: <%= ENV["DATABASE_URL"] %>
+  primary: &production_primary
+    <<: *default
+    database: meetup_website_production
+    username: meetup_website
+    password: <%= ENV["MEETUP_WEBSITE_DATABASE_PASSWORD"] %>
+  cache:
+    <<: *production_primary
+    database: meetup_website_production_cache
