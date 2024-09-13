@@ -1,4 +1,5 @@
 default: &default
+  database: meetup_website_cache
   store_options:
     # Cap age of oldest cache entry to fulfill retention policies
     # max_age: <%= 60.days.to_i %>
@@ -7,12 +8,9 @@ default: &default
 
 development:
   <<: *default
-  database: meetup_website_dev_cache
 
 test:
   <<: *default
-  database: meetup_website_test_cache
 
 production:
   <<: *default
-  database: meetup_website_production_cache

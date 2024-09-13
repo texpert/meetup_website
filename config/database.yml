@@ -54,7 +54,7 @@ development:
 
   cache:
     <<: *primary_development
-    database: meetup_website_dev_cache
+    database: meetup_website_cache
     migrations_paths: db/cache_migrate
 
 # Warning: The database defined as "test" will be erased and
