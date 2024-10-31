@@ -5,7 +5,7 @@ source 'https://rubygems.org'
 ruby file: '.tool-versions'
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
-gem 'rails', '~> 7.2.1'
+gem 'rails', '~> 7.2.2'
 
 gem 'bootsnap', require: false # Reduces boot times through caching; required in config/boot.rb
 gem 'dartsass-rails'
