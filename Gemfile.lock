@@ -110,22 +110,22 @@ GEM
       railties (>= 7.0)
     globalid (1.2.1)
       activesupport (>= 6.1)
-    google-protobuf (4.29.1)
+    google-protobuf (4.29.2)
       bigdecimal
       rake (>= 13)
-    google-protobuf (4.29.1-aarch64-linux)
+    google-protobuf (4.29.2-aarch64-linux)
       bigdecimal
       rake (>= 13)
-    google-protobuf (4.29.1-arm64-darwin)
+    google-protobuf (4.29.2-arm64-darwin)
       bigdecimal
       rake (>= 13)
-    google-protobuf (4.29.1-x86-linux)
+    google-protobuf (4.29.2-x86-linux)
       bigdecimal
       rake (>= 13)
-    google-protobuf (4.29.1-x86_64-darwin)
+    google-protobuf (4.29.2-x86_64-darwin)
       bigdecimal
       rake (>= 13)
-    google-protobuf (4.29.1-x86_64-linux)
+    google-protobuf (4.29.2-x86_64-linux)
       bigdecimal
       rake (>= 13)
     i18n (1.14.6)
@@ -135,7 +135,7 @@ GEM
       activesupport (>= 6.0.0)
       railties (>= 6.0.0)
     io-console (0.8.0)
-    irb (1.14.2)
+    irb (1.14.3)
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
     json (2.9.0)
@@ -233,7 +233,7 @@ GEM
       zeitwerk (~> 2.6)
     rainbow (3.1.1)
     rake (13.2.1)
-    rdoc (6.9.1)
+    rdoc (6.10.0)
       psych (>= 4.0.0)
     regexp_parser (2.9.3)
     reline (0.6.0)
