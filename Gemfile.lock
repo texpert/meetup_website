@@ -157,7 +157,7 @@ GEM
     mini_mime (1.1.5)
     mini_portile2 (2.8.8)
     minitest (5.25.4)
-    msgpack (1.7.5)
+    msgpack (1.8.0)
     net-imap (0.5.5)
       date
       net-protocol
@@ -246,7 +246,7 @@ GEM
       zeitwerk (~> 2.6)
     rainbow (3.1.1)
     rake (13.2.1)
-    rdoc (6.11.0)
+    rdoc (6.12.0)
       psych (>= 4.0.0)
     regexp_parser (2.10.0)
     reline (0.6.0)
@@ -323,7 +323,7 @@ GEM
     sass-embedded (1.83.4-x86_64-linux-musl)
       google-protobuf (~> 4.29)
     securerandom (0.4.1)
-    solid_cache (1.0.6)
+    solid_cache (1.0.7)
       activejob (>= 7.2)
       activerecord (>= 7.2)
       railties (>= 7.2)
