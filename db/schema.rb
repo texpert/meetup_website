@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_12_065544) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_13_074127) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "hstore"
@@ -169,7 +169,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_12_065544) do
        RETURNS trigger
        LANGUAGE plpgsql
       AS $function$
-        -- version: 4
+        -- version: 5
         DECLARE
           changes jsonb;
           version jsonb;
@@ -185,6 +185,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_12_065544) do
           item record;
           columns text[];
           include_columns boolean;
+          detached_log_data jsonb;
+          -- We use `detached_loggable_type` for:
+          -- 1. Checking if current implementation is `--detached` (`log_data` is stored in a separated table)
+          -- 2. If implementation is `--detached` then we use detached_loggable_type to determine
+          --    to which table current `log_data` record belongs
+          detached_loggable_type text;
+          log_data_table_name text;
+          log_data_is_empty boolean;
+          log_data_ts_key_data text;
           ts timestamp with time zone;
           ts_column text;
           err_sqlstate text;
@@ -200,8 +209,30 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_12_065544) do
           ts_column := NULLIF(TG_ARGV[1], 'null');
           columns := NULLIF(TG_ARGV[2], 'null');
           include_columns := NULLIF(TG_ARGV[3], 'null');
+          detached_loggable_type := NULLIF(TG_ARGV[5], 'null');
+          log_data_table_name := NULLIF(TG_ARGV[6], 'null');
 
-          IF NEW.log_data is NULL OR NEW.log_data = '{}'::jsonb
+          -- getting previous log_data if it exists for detached `log_data` storage variant
+          IF detached_loggable_type IS NOT NULL
+          THEN
+            EXECUTE format(
+              'SELECT ldtn.log_data ' ||
+              'FROM %I ldtn ' ||
+              'WHERE ldtn.loggable_type = $1 ' ||
+                'AND ldtn.loggable_id = $2 '  ||
+              'LIMIT 1',
+              log_data_table_name
+            ) USING detached_loggable_type, NEW.id INTO detached_log_data;
+          END IF;
+
+          IF detached_loggable_type IS NULL
+          THEN
+              log_data_is_empty = NEW.log_data is NULL OR NEW.log_data = '{}'::jsonb;
+          ELSE
+              log_data_is_empty = detached_log_data IS NULL OR detached_log_data = '{}'::jsonb;
+          END IF;
+
+          IF log_data_is_empty
           THEN
             IF columns IS NOT NULL THEN
               log_data = logidze_snapshot(to_jsonb(NEW.*), ts_column, columns, include_columns);
@@ -210,7 +241,16 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_12_065544) do
             END IF;
 
             IF log_data#>>'{h, -1, c}' != '{}' THEN
-              NEW.log_data := log_data;
+              IF detached_loggable_type IS NULL
+              THEN
+                NEW.log_data := log_data;
+              ELSE
+                EXECUTE format(
+                  'INSERT INTO %I(log_data, loggable_type, loggable_id) ' ||
+                  'VALUES ($1, $2, $3);',
+                  log_data_table_name
+                ) USING log_data, detached_loggable_type, NEW.id;
+              END IF;
             END IF;
 
           ELSE
@@ -222,7 +262,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_12_065544) do
             history_limit := NULLIF(TG_ARGV[0], 'null');
             debounce_time := NULLIF(TG_ARGV[4], 'null');
 
-            log_data := NEW.log_data;
+            IF detached_loggable_type IS NULL
+            THEN
+                log_data := NEW.log_data;
+            ELSE
+                log_data := detached_log_data;
+            END IF;
 
             current_version := (log_data->>'v')::int;
 
@@ -235,8 +280,16 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_12_065544) do
               END IF;
             ELSEIF TG_OP = 'INSERT' THEN
               ts := (to_jsonb(NEW.*) ->> ts_column)::timestamp with time zone;
-              IF ts IS NULL OR (extract(epoch from ts) * 1000)::bigint = (NEW.log_data #>> '{h,-1,ts}')::bigint THEN
-                ts := statement_timestamp();
+
+              IF detached_loggable_type IS NULL
+              THEN
+                log_data_ts_key_data = NEW.log_data #>> '{h,-1,ts}';
+              ELSE
+                log_data_ts_key_data = detached_log_data #>> '{h,-1,ts}';
+              END IF;
+
+              IF ts IS NULL OR (extract(epoch from ts) * 1000)::bigint = log_data_ts_key_data::bigint THEN
+                  ts := statement_timestamp();
               END IF;
             END IF;
 
@@ -293,7 +346,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_12_065544) do
               END;
             END IF;
 
-            changes = changes - 'log_data';
+            -- We store `log_data` in a separate table for the `detached` mode
+            -- So we remove `log_data` only when we store historic data in the record's origin table
+            IF detached_loggable_type IS NULL
+            THEN
+                changes = changes - 'log_data';
+            END IF;
 
             IF columns IS NOT NULL THEN
               changes = logidze_filter_keys(changes, columns, include_columns);
@@ -340,7 +398,21 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_12_065544) do
               log_data := logidze_compact_history(log_data, size - history_limit + 1);
             END IF;
 
-            NEW.log_data := log_data;
+            IF detached_loggable_type IS NULL
+            THEN
+              NEW.log_data := log_data;
+            ELSE
+              detached_log_data = log_data;
+              EXECUTE format(
+                'UPDATE %I ' ||
+                'SET log_data = $1 ' ||
+                'WHERE %I.loggable_type = $2 ' ||
+                'AND %I.loggable_id = $3',
+                log_data_table_name,
+                log_data_table_name,
+                log_data_table_name
+              ) USING detached_log_data, detached_loggable_type, NEW.id;
+            END IF;
           END IF;
 
           RETURN NEW; -- result
@@ -376,7 +448,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_12_065544) do
        RETURNS trigger
        LANGUAGE plpgsql
       AS $function$
-        -- version: 4
+        -- version: 5
 
 
         DECLARE
@@ -394,6 +466,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_12_065544) do
           item record;
           columns text[];
           include_columns boolean;
+          detached_log_data jsonb;
+          -- We use `detached_loggable_type` for:
+          -- 1. Checking if current implementation is `--detached` (`log_data` is stored in a separated table)
+          -- 2. If implementation is `--detached` then we use detached_loggable_type to determine
+          --    to which table current `log_data` record belongs
+          detached_loggable_type text;
+          log_data_table_name text;
+          log_data_is_empty boolean;
+          log_data_ts_key_data text;
           ts timestamp with time zone;
           ts_column text;
           err_sqlstate text;
@@ -409,8 +490,30 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_12_065544) do
           ts_column := NULLIF(TG_ARGV[1], 'null');
           columns := NULLIF(TG_ARGV[2], 'null');
           include_columns := NULLIF(TG_ARGV[3], 'null');
+          detached_loggable_type := NULLIF(TG_ARGV[5], 'null');
+          log_data_table_name := NULLIF(TG_ARGV[6], 'null');
 
-          IF NEW.log_data is NULL OR NEW.log_data = '{}'::jsonb
+          -- getting previous log_data if it exists for detached `log_data` storage variant
+          IF detached_loggable_type IS NOT NULL
+          THEN
+            EXECUTE format(
+              'SELECT ldtn.log_data ' ||
+              'FROM %I ldtn ' ||
+              'WHERE ldtn.loggable_type = $1 ' ||
+                'AND ldtn.loggable_id = $2 '  ||
+              'LIMIT 1',
+              log_data_table_name
+            ) USING detached_loggable_type, NEW.id INTO detached_log_data;
+          END IF;
+
+          IF detached_loggable_type IS NULL
+          THEN
+              log_data_is_empty = NEW.log_data is NULL OR NEW.log_data = '{}'::jsonb;
+          ELSE
+              log_data_is_empty = detached_log_data IS NULL OR detached_log_data = '{}'::jsonb;
+          END IF;
+
+          IF log_data_is_empty
           THEN
             IF columns IS NOT NULL THEN
               log_data = logidze_snapshot(to_jsonb(NEW.*), ts_column, columns, include_columns);
@@ -419,7 +522,16 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_12_065544) do
             END IF;
 
             IF log_data#>>'{h, -1, c}' != '{}' THEN
-              NEW.log_data := log_data;
+              IF detached_loggable_type IS NULL
+              THEN
+                NEW.log_data := log_data;
+              ELSE
+                EXECUTE format(
+                  'INSERT INTO %I(log_data, loggable_type, loggable_id) ' ||
+                  'VALUES ($1, $2, $3);',
+                  log_data_table_name
+                ) USING log_data, detached_loggable_type, NEW.id;
+              END IF;
             END IF;
 
           ELSE
@@ -431,7 +543,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_12_065544) do
             history_limit := NULLIF(TG_ARGV[0], 'null');
             debounce_time := NULLIF(TG_ARGV[4], 'null');
 
-            log_data := NEW.log_data;
+            IF detached_loggable_type IS NULL
+            THEN
+                log_data := NEW.log_data;
+            ELSE
+                log_data := detached_log_data;
+            END IF;
 
             current_version := (log_data->>'v')::int;
 
@@ -444,8 +561,16 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_12_065544) do
               END IF;
             ELSEIF TG_OP = 'INSERT' THEN
               ts := (to_jsonb(NEW.*) ->> ts_column)::timestamp with time zone;
-              IF ts IS NULL OR (extract(epoch from ts) * 1000)::bigint = (NEW.log_data #>> '{h,-1,ts}')::bigint THEN
-                ts := statement_timestamp();
+
+              IF detached_loggable_type IS NULL
+              THEN
+                log_data_ts_key_data = NEW.log_data #>> '{h,-1,ts}';
+              ELSE
+                log_data_ts_key_data = detached_log_data #>> '{h,-1,ts}';
+              END IF;
+
+              IF ts IS NULL OR (extract(epoch from ts) * 1000)::bigint = log_data_ts_key_data::bigint THEN
+                  ts := statement_timestamp();
               END IF;
             END IF;
 
@@ -502,7 +627,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_12_065544) do
               END;
             END IF;
 
-            changes = changes - 'log_data';
+            -- We store `log_data` in a separate table for the `detached` mode
+            -- So we remove `log_data` only when we store historic data in the record's origin table
+            IF detached_loggable_type IS NULL
+            THEN
+                changes = changes - 'log_data';
+            END IF;
 
             IF columns IS NOT NULL THEN
               changes = logidze_filter_keys(changes, columns, include_columns);
@@ -549,11 +679,30 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_12_065544) do
               log_data := logidze_compact_history(log_data, size - history_limit + 1);
             END IF;
 
-            NEW.log_data := log_data;
+            IF detached_loggable_type IS NULL
+            THEN
+              NEW.log_data := log_data;
+            ELSE
+              detached_log_data = log_data;
+              EXECUTE format(
+                'UPDATE %I ' ||
+                'SET log_data = $1 ' ||
+                'WHERE %I.loggable_type = $2 ' ||
+                'AND %I.loggable_id = $3',
+                log_data_table_name,
+                log_data_table_name,
+                log_data_table_name
+              ) USING detached_log_data, detached_loggable_type, NEW.id;
+            END IF;
           END IF;
 
-              EXECUTE format('UPDATE %I.%I SET "log_data" = $1 WHERE ctid = %L', TG_TABLE_SCHEMA, TG_TABLE_NAME, NEW.CTID) USING NEW.log_data;
+          IF detached_loggable_type IS NULL
+          THEN
+            EXECUTE format('UPDATE %I.%I SET "log_data" = $1 WHERE ctid = %L', TG_TABLE_SCHEMA, TG_TABLE_NAME, NEW.CTID) USING NEW.log_data;
+          END IF;
+
           RETURN NULL;
+
         EXCEPTION
           WHEN OTHERS THEN
             GET STACKED DIAGNOSTICS err_sqlstate = RETURNED_SQLSTATE,
