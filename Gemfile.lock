@@ -1,8 +1,8 @@
 GIT
   remote: https://github.com/palkan/logidze
-  revision: 34aa315accfe556c16a3da8ef4ceb1da90fee81b
+  revision: 9fa20e919b33e9500dded65f55991dc7d7a1c17f
   specs:
-    logidze (1.4.0)
+    logidze (1.4.1)
       activerecord (>= 6.0)
       railties (>= 6.0)
 
