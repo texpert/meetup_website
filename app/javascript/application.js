@@ -3,6 +3,7 @@ import "controllers"
 import "@hotwired/turbo-rails"
 import "@popperjs/core"
 import "bootstrap"
+import "admin-lte"
 
 import "@fortawesome/fontawesome-free"
 FontAwesome.config.mutateApproach = 'sync' // prevents from flickering
