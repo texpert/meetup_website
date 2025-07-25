@@ -4,6 +4,7 @@ class User < ApplicationRecord
   has_logidze
 
   include Discard::Model
+
   self.discard_column = :deleted_at
 
   has_many :emails, as: :user # rubocop:disable Rails/HasManyOrHasOneDependent
