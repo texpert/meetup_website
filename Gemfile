@@ -5,7 +5,7 @@ source 'https://rubygems.org'
 ruby file: '.tool-versions'
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
-gem 'rails', '~> 8.0.3'
+gem 'rails', '~> 8.1.0'
 
 gem 'bootsnap', require: false # Reduces boot times through caching; required in config/boot.rb
 gem 'dartsass-rails'
@@ -15,6 +15,7 @@ gem 'discard'
 gem 'fx' # Versioned database functions and triggers for Rails, used by logidze to work with db/schema.rb
 gem 'importmap-rails' # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
 gem 'logidze' # Database changes log for Rails
+gem 'openssl'
 gem 'pg', '~> 1.6' # Use postgresql as the database for Active Record
 gem 'propshaft'
 gem 'puma', '>= 5.0' # Use the Puma web server [https://github.com/puma/puma]
