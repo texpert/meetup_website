@@ -1,12 +1,9 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
-
-Things you may want to cover:
+This application is running on:
 
 * Ruby version 3.4.5
-* Rails version 8.0.3
+* Rails version 8.1.0
 
 ## Dependencies
 
