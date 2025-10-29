@@ -3,7 +3,7 @@
 This application is running on:
 
 * Ruby version 3.4.5
-* Rails version 8.1.0
+* Rails version 8.1.1
 
 ## Dependencies
 
