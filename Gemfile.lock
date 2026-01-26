@@ -1,3 +1,10 @@
+GIT
+  remote: https://github.com/mgmodell/devise-multi_email
+  revision: e18bcb3aa01e2f474422d68598151c0f1b4d1eba
+  specs:
+    devise-multi_email (3.0.1)
+      devise
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -99,8 +106,6 @@ GEM
       railties (>= 4.1.0)
       responders
       warden (~> 1.2.3)
-    devise-multi_email (3.0.1)
-      devise
     diff-lcs (1.6.2)
     discard (1.4.0)
       activerecord (>= 4.2, < 9.0)
@@ -412,7 +417,7 @@ DEPENDENCIES
   dartsass-rails
   debug
   devise
-  devise-multi_email
+  devise-multi_email!
   discard
   foreman
   fx
