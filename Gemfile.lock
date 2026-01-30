@@ -1,6 +1,7 @@
 GIT
-  remote: https://github.com/mgmodell/devise-multi_email
-  revision: 98bbd397e1494f097ea7a1cd709d19cc676b64b6
+  remote: https://github.com/allenwq/devise-multi_email
+  revision: 027f65e9b52e35d1323f3fed792b585e730bd984
+  branch: master
   specs:
     devise-multi_email (3.0.1)
       devise
