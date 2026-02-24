@@ -10,7 +10,7 @@ gem 'rails', '~> 8.1.2'
 gem 'bootsnap', require: false # Reduces boot times through caching; required in config/boot.rb
 gem 'dartsass-rails'
 gem 'devise'
-gem 'devise-multi_email', git: 'https://github.com/allenwq/devise-multi_email', branch: 'master'
+gem 'devise-multi_email_revived', require: 'devise/multi_email'
 gem 'discard'
 gem 'fx' # Versioned database functions and triggers for Rails, used by logidze to work with db/schema.rb
 gem 'importmap-rails' # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
