@@ -101,7 +101,7 @@ GEM
       railties (>= 7.0)
       responders
       warden (~> 1.2.3)
-    devise-multi_email_revived (3.1.0)
+    devise-multi_email (3.1.5)
       devise (< 6.0)
     diff-lcs (1.6.2)
     discard (1.4.0)
@@ -422,7 +422,7 @@ DEPENDENCIES
   dartsass-rails
   debug
   devise
-  devise-multi_email_revived
+  devise-multi_email
   discard
   foreman
   fx
