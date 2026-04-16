@@ -105,7 +105,7 @@ GEM
     discard (1.4.0)
       activerecord (>= 4.2, < 9.0)
     drb (2.2.3)
-    erb (6.0.2)
+    erb (6.0.3)
     erubi (1.13.1)
     foreman (0.90.0)
       thor (~> 1.4)
