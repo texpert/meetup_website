@@ -169,7 +169,7 @@ GEM
       net-imap
       net-pop
       net-smtp
-    marcel (1.2.0)
+    marcel (1.2.1)
     mini_mime (1.1.5)
     mini_portile2 (2.8.9)
     minitest (6.0.6)
