@@ -13,8 +13,8 @@ jobs:
       - name: Setup Ruby and install gems
         uses: ruby/setup-ruby@v1
         with:
+          ruby-version: .tool-versions
+          rubygems: 4.0.19
           bundler-cache: true
-      - name: Generate binstubs
-        run: bundle binstubs rubocop
       - name: Lint Ruby files
-        run: bin/rubocop --parallel
+        run: bin/rubocop
