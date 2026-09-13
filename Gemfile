@@ -14,7 +14,7 @@ gem 'devise-multi_email'
 gem 'discard'
 gem 'fx' # Versioned database functions and triggers for Rails, used by logidze to work with db/schema.rb
 gem 'importmap-rails' # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
-gem 'json', '< 3.0.0'
+gem 'json', '< 4.0.0'
 gem 'logidze' # Database changes log for Rails
 gem 'openssl'
 gem 'pg', '~> 1.6' # Use postgresql as the database for Active Record
