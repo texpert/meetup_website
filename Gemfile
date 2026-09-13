@@ -14,11 +14,12 @@ gem 'devise-multi_email'
 gem 'discard'
 gem 'fx' # Versioned database functions and triggers for Rails, used by logidze to work with db/schema.rb
 gem 'importmap-rails' # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
+gem 'json', '< 3.0.0'
 gem 'logidze' # Database changes log for Rails
 gem 'openssl'
 gem 'pg', '~> 1.6' # Use postgresql as the database for Active Record
 gem 'propshaft'
-gem 'puma', '>= 5.0' # Use the Puma web server [https://github.com/puma/puma]
+gem 'puma', '>= 8.0.2' # Use the Puma web server [https://github.com/puma/puma]
 gem 'solid_cache'
 gem 'stimulus-rails' # Hotwire's modest JavaScript framework [https://stimulus.hotwired.dev]
 gem 'turbo-rails' # Hotwire's SPA-like page accelerator [https://turbo.hotwired.dev]
