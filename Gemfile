@@ -17,7 +17,7 @@ gem 'importmap-rails' # Use JavaScript with ESM import maps [https://github.com/
 gem 'json', '< 3.0.0'
 gem 'logidze' # Database changes log for Rails
 gem 'openssl'
-gem 'pg', '~> 1.6' # Use postgresql as the database for Active Record
+gem 'pg', '~> 1.7' # Use postgresql as the database for Active Record
 gem 'propshaft'
 gem 'puma', '>= 8.0.2' # Use the Puma web server [https://github.com/puma/puma]
 gem 'solid_cache'
